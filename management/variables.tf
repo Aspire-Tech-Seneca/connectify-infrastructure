@@ -8,9 +8,26 @@ variable "app_role" {
 }
 
 variable "region" {
-  type = string
+  description = "Region to be deployed"
+  type        = string
 }
 
 variable "env" {
-  type = string
+  description = "Environment of the Infrastucture"
+  type        = string
+}
+
+variable "vm_user" {
+  description = "Virtual Machine user for SSH"
+  type        = string
+}
+
+variable "vm_kp" {
+  description = "Public Key Pair of the Virtual Machine"
+  type        = string
+}
+
+variable "vm_size" {
+  description = "Size of the Virtual Machine"
+  type        = string
 }
