@@ -97,7 +97,7 @@ resource "azurerm_network_security_group" "nsg" {
     destination_port_range     = "80"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
-  }  
+  }
 
   tags = merge(local.default_tags, {
     Name = local.nsg
@@ -146,4 +146,18 @@ resource "azurerm_linux_virtual_machine" "atc_vm" {
   })
 
   depends_on = [azurerm_subnet.default]
+}
+
+#CONTAINER REGISTRY
+resource "azurerm_container_registry" "atc_acr" {
+  name                = local.atc_acr
+  resource_group_name = azurerm_resource_group.app_resource_group.name
+  location            = azurerm_resource_group.app_resource_group.location
+  sku                 = "Standard"
+
+  tags = merge(local.default_tags, {
+    Name = local.atc_acr
+  })
+
+  depends_on = [azurerm_resource_group.app_resource_group]
 }
