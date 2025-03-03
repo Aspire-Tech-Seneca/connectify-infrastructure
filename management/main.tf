@@ -161,3 +161,18 @@ resource "azurerm_container_registry" "atc_acr" {
 
   depends_on = [azurerm_resource_group.app_resource_group]
 }
+
+
+resource "azurerm_storage_account" "atc_sa" {
+  name                     = local.storage_account
+  resource_group_name      = azurerm_resource_group.app_resource_group.name
+  location                 = azurerm_resource_group.app_resource_group.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "atc_sc" {
+  name                  = local.storage_container
+  storage_account_id    = azurerm_storage_account.atc_sa.id
+  container_access_type = "blob"
+}
