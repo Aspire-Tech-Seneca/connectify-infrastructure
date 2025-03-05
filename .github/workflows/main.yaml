@@ -93,7 +93,7 @@ jobs:
         working-directory: ${{ matrix.dir }} # Use your environment folder
           
       - name: TF | Terraform Apply
-        run: terraform apply --var-file="./terraform.tfvars" -input=false tf.plan
+        run: terraform apply -input=false tf.plan
         working-directory: ${{ matrix.dir }} # Use your environment folder
         shell: bash
 
