@@ -69,7 +69,7 @@ jobs:
           echo 'region = "${{ secrets.REGION }}"' >> terraform.tfvars
           echo 'env = "dev"' >> terraform.tfvars
           echo 'vm_user = "${{ secrets.VM_USER }}"' >> terraform.tfvars
-          echo 'vm_kp = "${{ secrets.VM_KP }}.pub"' >> terraform.tfvars
+          echo 'vm_kp = "./key_pairs/${{ secrets.VM_KP }}.pub"' >> terraform.tfvars
           echo 'vm_size = "Standard_B2s"' >> terraform.tfvars
 
 
