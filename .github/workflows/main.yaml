@@ -62,6 +62,7 @@ jobs:
 
 
       - name: SETUP | CREATE tfvars file
+        working-directory: ${{ matrix.dir }}
         run: |
           echo 'subscription_id = "${{ secrets.AZURE_SUBSCRIPTION_ID }}"' > terraform.tfvars
           echo 'region = "${{ secrets.REGION }}"' >> terraform.tfvars
