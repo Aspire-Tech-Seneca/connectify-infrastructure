@@ -53,9 +53,10 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
       - name: Create SSH Key
+        working-directory: ./management
         run: |
-         echo "${{ secrets.SSH_PUB_KP }}" > ${{ github.workspace }}/key_pairs/${{ secrets.VM_KP }}.pub         
-         sudo chmod 600 ${{ github.workspace }}/key_pairs/${{ secrets.VM_KP }}.pub
+         echo "${{ secrets.SSH_PUB_KP }}" > ./key_pairs/${{ secrets.VM_KP }}.pub         
+         sudo chmod 600 ./key_pairs/${{ secrets.VM_KP }}.pub
 
       - name: CREATE tfvars file
         run: |
