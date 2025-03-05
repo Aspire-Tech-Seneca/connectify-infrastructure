@@ -55,8 +55,8 @@ jobs:
       - name: Create SSH Key
         working-directory: ./management
         run: |
-         echo "${{ secrets.SSH_PUB_KP }}" > ${{ github.workspace }}/management/key_pairs/${{ secrets.VM_KP }}.pub         
-         sudo chmod 600 ${{ github.workspace }}/management/key_pairs/${{ secrets.VM_KP }}.pub
+         echo "${{ secrets.SSH_PUB_KP }}" > ${{ github.workspace }}/management/key_pairs/connectify_kp.pub         
+         sudo chmod 600 ${{ github.workspace }}/management/key_pairs/connectify_kp.pub
 
       - name: CREATE tfvars file
         run: |
