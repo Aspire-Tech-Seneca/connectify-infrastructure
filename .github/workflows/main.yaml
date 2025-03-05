@@ -1,25 +1,16 @@
-name: "Terraform - DEV"
-# https://gaunacode.com/deploying-terraform-at-scale-with-github-actions
+name: 'Terraform'
+
 on:
   push:
-    branches:
-    - dev
-    paths:
-    - management/**
-
+    branches: [ "main" ]
   pull_request:
-    branches:
-    - dev
-    paths: 
-    - management/**  
 
 permissions:
-  contents: write
-  pull-requests: write 
+  contents: read
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: 'Terraform'
     runs-on: ubuntu-latest
     environment: dev
     env:
@@ -27,70 +18,38 @@ jobs:
       AZURE_CLIENT_ID:  ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_SECRET:  ${{ secrets.AZURE_SECRET }}
       AZURE_TENANT:  ${{ secrets.AZURE_TENANT }}
-    
-    strategy:
-      matrix:
-        dir: ["./management"]
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.1.9
-          terraform_wrapper: true
-
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt 
-        continue-on-error: true
-        working-directory: ${{ matrix.dir }}
-
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        working-directory: ${{ matrix.dir }}
-
-           
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-        working-directory: ${{ matrix.dir }}
-
-      - name: Create SSH Key
-        working-directory: ./dev/compute
-        run: |
-         echo "${{ secrets.SSH_PUB_KP }}" > ~/.ssh/connectify_kp.pub       
-         sudo chmod 600 ~/.ssh/connectify_kp.pub 
-         
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -input=false -no-color -out tf.plan
-        working-directory: ${{ matrix.dir }} # Use your environment folder
-        continue-on-error: true
-
-      - name: Get result
-        run: echo "${{ steps.validate.outputs.stdout }}"
-      
-      - name: Terraform Show
-        id: show
-        run: terraform show -no-color tf.plan 2>&1 > /tmp/plan.txt
-        working-directory: ${{ matrix.dir }} # Use your environment folder
-          
-      - name: Terraform Apply
-        run: terraform apply -input=false tf.plan
-        working-directory: ${{ matrix.dir }} # Use your environment folder
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
         shell: bash
 
-    #   - name: Notify Ansible Workflow
-    #     if: success()
-    #     uses: peter-evans/repository-dispatch@v2
-    #     with:
-    #       token: ${{ secrets.PAT_TOKEN }}
-    #       repository: who1-dev/acs-project-ansible
-    #       event-type: terraform_complete
-    #       client-payload: '{"environment": "prod"}'
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.1.9
+        terraform_wrapper: true
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform plan -input=false
+
+      # On push to "main", build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/"dev"' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
