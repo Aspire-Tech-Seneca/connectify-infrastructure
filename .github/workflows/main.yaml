@@ -95,7 +95,7 @@ jobs:
       - name: TF | Terraform Apply
         run: terraform apply -input=false tf.plan
         working-directory: ${{ matrix.dir }} # Use your environment folder
-        shell: bash
+        shell: bash 
 
     #   - name: Notify Ansible Workflow
     #     if: success()
