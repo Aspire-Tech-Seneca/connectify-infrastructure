@@ -52,11 +52,19 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
       - name: Create SSH Key
-        working-directory: ~/.ssh
+        working-directory: management
         run: |
-         echo "${{ secrets.SSH_PUB_KP }}" > ./connectify_kp.pub       
-         sudo chmod 600 ./connectify_kp.pub 
-         
+         echo "${{ secrets.SSH_PUB_KP }}" > ${{ github.workspace }}/management/key_pairs/${{ secrets.VM_KP }}.pub         
+         sudo chmod 600 ${{ github.workspace }}/management/key_pairs/${{ secrets.VM_KP }}.pub
+
+      - name: CREATE tfvars file
+        run: |
+          echo 'subscription_id = "${{ secrets.AZURE_SUBSCRIPTION_ID }}"' > terraform.tfvars
+          echo 'region = "${{ secrets.REGION }}"' >> terraform.tfvars
+          echo 'env = "dev"' >> terraform.tfvars
+          echo 'vm_user = "${{ secrets.VM_USER }}"' >> terraform.tfvars
+          echo 'vm_kp = "${{ secrets.VM_KP }}.pub"' >> terraform.tfvars
+          echo 'vm_size = "Standard_B2s"' >> terraform.tfvars
 
       - name: Terraform Plan
         id: plan

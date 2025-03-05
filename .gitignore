@@ -45,3 +45,4 @@ terraform.rc
 .env
 .bin
 .ssh
+management/key_pairs
