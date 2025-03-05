@@ -72,7 +72,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -input=false -no-color -out tf.plan
+        run: terraform plan --var-file="./terraform.tfvars" -input=false -no-color -out tf.plan
         working-directory: ${{ matrix.dir }} # Use your environment folder
         continue-on-error: true
 
@@ -85,7 +85,7 @@ jobs:
         working-directory: ${{ matrix.dir }} # Use your environment folder
           
       - name: Terraform Apply
-        run: terraform apply -input=false tf.plan
+        run: terraform apply --var-file="./terraform.tfvars" -input=false tf.plan
         working-directory: ${{ matrix.dir }} # Use your environment folder
         shell: bash
 
