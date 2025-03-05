@@ -52,10 +52,10 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
       - name: Create SSH Key
-        working-directory: ./dev/compute
+        working-directory: ~/.ssh
         run: |
-         echo "${{ secrets.SSH_PUB_KP }}" > ~/.ssh/connectify_kp.pub       
-         sudo chmod 600 ~/.ssh/connectify_kp.pub 
+         echo "${{ secrets.SSH_PUB_KP }}" > ./connectify_kp.pub       
+         sudo chmod 600 ./connectify_kp.pub 
          
 
       - name: Terraform Plan
