@@ -20,3 +20,9 @@ chmod +x /usr/local/bin/docker-compose
 
 echo "Docker Compose installation complete!"
 
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+sudo apt-get install -y azure-cli
+
+echo "Azure CLI installation complete!"
+
+
