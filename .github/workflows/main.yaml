@@ -93,6 +93,7 @@ jobs:
         working-directory: ${{ matrix.dir }} # Use your environment folder
           
       - name: TF | Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -input=false tf.plan
         working-directory: ${{ matrix.dir }} # Use your environment folder
         shell: bash 
