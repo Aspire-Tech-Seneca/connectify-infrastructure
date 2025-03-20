@@ -100,7 +100,7 @@ jobs:
 
       - name: Ansible | Trigger deployment
         if: success()
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: Aspire-Tech-Seneca/connectify-ansible
