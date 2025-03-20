@@ -9,7 +9,7 @@ locals {
   # Resource Naming Conventions
   resource_group    = "${local.name_prefix}-RESOURCE-GROUP"
   storage_account   = lower("${local.name_prefix_an}storageaccount")
-  storage_container = lower("${local.name_prefix_an}storagecontainer")
+  storage_container = "media"
   vnet              = "${local.name_prefix}-VNET"
   subnet            = "${local.name_prefix}-SUBNET"
   pip               = "${local.name_prefix}-PIP"

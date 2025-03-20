@@ -2,7 +2,7 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "dev_test" ]
 
   pull_request:
 
@@ -97,11 +97,11 @@ jobs:
         working-directory: ${{ matrix.dir }} # Use your environment folder
         shell: bash 
 
-    #   - name: Notify Ansible Workflow
-    #     if: success()
-    #     uses: peter-evans/repository-dispatch@v2
-    #     with:
-    #       token: ${{ secrets.PAT_TOKEN }}
-    #       repository: who1-dev/acs-project-ansible
-    #       event-type: terraform_complete
-    #       client-payload: '{"environment": "prod"}'
+      - name: Ansible | Trigger deployment
+        if: success()
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: Aspire-Tech-Seneca/connectify-ansible
+          event-type: build_complete
+          client-payload: '{"trigger": "infra"}'
